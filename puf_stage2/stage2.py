@@ -12,12 +12,7 @@ Stage_II_targets = pd.read_csv("../stage1/Stage_II_targets.csv",
                                index_col=0)
 
 # # Use the matched_weight variable in CPS as the final weight
-# puf.s006 = puf.matched_weight * 100
-#
 # # Create two-dimensional array to hold sample weights for each year
-# z = np.empty([len(puf.s006), 18])
-# z[:, 0] = puf.s006
-
 length = len(puf.s006)
 z = np.empty([length, 18])
 z[:,0] = puf.s006/100
