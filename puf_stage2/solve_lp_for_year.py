@@ -73,8 +73,8 @@ def solve(puf, Stage_I_factors, Stage_II_targets, year, tol, func):
                               wage_11, wage_12))
 
     # Coefficients for r and s
-    A1 = np.matrix(One_half_LHS)
-    A2 = np.matrix(-One_half_LHS)
+    A1 = np.array(One_half_LHS)
+    A2 = np.array(-One_half_LHS)
 
     # print ('A1 SHAPE', A1.shape)
 
@@ -182,6 +182,9 @@ def solve(puf, Stage_I_factors, Stage_II_targets, year, tol, func):
 
     for i in range(len(temp)):
         b.append(temp[i])
+
+    if func == 'julia':
+        return (A1, A2, b)
 
     r, s = func(A1, A2, b, tol)
 

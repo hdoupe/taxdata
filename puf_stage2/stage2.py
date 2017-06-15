@@ -22,12 +22,23 @@ z[:, 0] = puf.s006
 # puf_samp = puf.sample(n=length/10, weights=puf.s006)
 
 # Execute stage2 logic for each year using a year-specific LP tolerance
-df_orig = solve(puf, Stage_I_factors, Stage_II_targets, "2010", 0.45,
-                solve_lp_for_year_cylp)
-df_orig.to_csv('weights_orig_2010.csv', index=False)
-df_test = solve(puf, Stage_I_factors, Stage_II_targets, "2010", 0.45,
-                solve_lp_for_year_reformat)
-df_test.to_csv('weights_test_2010.csv', index=False)
+# df_orig = solve(puf, Stage_I_factors, Stage_II_targets, "2010", 0.45,
+#                 solve_lp_for_year_cylp)
+# df_orig.to_csv('weights_orig_2010.csv', index=False)
+# df_test = solve(puf, Stage_I_factors, Stage_II_targets, "2010", 0.45,
+#                 solve_lp_for_year_reformat)
+# df_test.to_csv('weights_test_2010.csv', index=False)
+
+A1, A2, b = solve(puf, Stage_I_factors, Stage_II_targets, "2010", 0.45, 'julia')
+# A1 = {'A1'+str(i): A1[i, :] for i in range(0,A1.shape[0])}
+# A2 = {'A2'+str(i): A2[i, :] for i in range(0,A2.shape[0])}
+A1 = pd.DataFrame(A1)
+A2 = pd.DataFrame(A2)
+b = pd.DataFrame({'b': b})
+A1.to_csv('A1.csv', index=False)
+A2.to_csv('A2.csv', index=False)
+b.to_csv('b.csv', index=False)
+
 # z[:, 2] = solve_lp_for_year(puf, Stage_I_factors, Stage_II_targets,
 #                             year='2011', tol=0.45)
 # z[:, 3] = solve_lp_for_year(puf, Stage_I_factors, Stage_II_targets,
