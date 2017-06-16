@@ -6,7 +6,7 @@ from scipy.optimize import linprog
 
 import pandas as pd
 
-
+# func is the function wrapping cylp, or whatever other solver you want to use
 def solve(puf, Stage_I_factors, Stage_II_targets, year, tol, func):
 
     puf_length = len(puf.s006)
@@ -198,9 +198,13 @@ def solve(puf, Stage_I_factors, Stage_II_targets, year, tol, func):
     return pd.DataFrame.from_dict({'r': r, 's': s, 'z': z})
 
 
+# original lp model
+# min c^T * (r + s)
+# s.t. A1^T * r + A2^T * s = targets
+#      r >= 0, s >= 0, r + s <= tol
 def solve_lp_for_year_cylp(A1, A2, b, tol):
     puf_length = A1.shape[1]
-    print(puf_length)
+    A1, A2 = np.matrix(A1), np.matrix(A2)
     targets = CyLPArray(b)
     print("Targets")
     print(targets)
@@ -233,12 +237,19 @@ def solve_lp_for_year_cylp(A1, A2, b, tol):
 
     return r, s
 
-
-def solve_lp_for_year_reformat(A1, A2, b, tol):
+# here I reframed the problem, yields very similar results
+# Let A = (A1 A2)^T, x = (r s)^T
+# i.e. A is A1 stacked on top of A2 and
+#      x is r stacked on top of s
+# min c^T * x
+# s.t. A^T * x = targets
+#      0 <= x <= tol
+def solve_lp_for_year_reframe(A1, A2, b, tol):
     A1 = A1.T
     A2 = A2.T
 
     A = np.vstack((A1, A2))
+    A = np.matrix(A)
 
     print('ASTACK SHAPE', A.shape)
 
