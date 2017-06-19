@@ -251,7 +251,7 @@ def solve_lp_for_year_reframe(A1, A2, b, tol):
     A = np.vstack((A1, A2))
     A = np.matrix(A)
 
-    print('ASTACK SHAPE', A.shape)
+    # print('ASTACK SHAPE', A.shape)
 
     b = np.array(b)
 
